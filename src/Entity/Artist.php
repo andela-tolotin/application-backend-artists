@@ -2,9 +2,10 @@
 
 namespace App\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use App\Utils\TokenGenerator;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\ArtistRepository")
@@ -33,8 +34,14 @@ class Artist
      */
     private $token;
 
+    /**
+     * @ORM\Column(type="string", length=6)
+     */
+    private $token;
+
     public function __construct()
     {
+        $this->token = TokenGenerator::generate(6);
         $this->Album = new ArrayCollection();
     }
 
