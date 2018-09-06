@@ -34,11 +34,6 @@ class Artist
      */
     private $token;
 
-    /**
-     * @ORM\Column(type="string", length=6)
-     */
-    private $token;
-
     public function __construct()
     {
         $this->token = TokenGenerator::generate(6);
