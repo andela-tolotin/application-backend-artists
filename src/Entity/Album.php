@@ -35,7 +35,7 @@ class Album
     private $token;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="text")
      */
     private $description;
 
@@ -118,7 +118,7 @@ class Album
     {
         $this->token = $token;
 
-        return $token;
+        return $this;
     }
 
     public function getArtist(): ?Artist
