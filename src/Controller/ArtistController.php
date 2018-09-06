@@ -11,42 +11,42 @@ use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 
 class ArtistController extends AbstractController
 {
-	use \App\Utils\JsonResponseTrait;
+    use \App\Utils\JsonResponseTrait;
 
-	private $artistRepository;
+    private $artistRepository;
 
-	public function __construct(ArtistRepository $artistRepository)
-	{
-		$this->artistRepository = $artistRepository;
-	}
+    public function __construct(ArtistRepository $artistRepository)
+    {
+        $this->artistRepository = $artistRepository;
+    }
 
     /**
      * @Route("/artist", name="artist")
      */
     public function index()
     {
-    	$artists = $this->artistRepository->findAll();
+        $artists = $this->artistRepository->findAll();
 
-		$encoder = new JsonEncoder();
-		$normalizer = new ObjectNormalizer();
+        $encoder = new JsonEncoder();
+        $normalizer = new ObjectNormalizer();
 
-		$normalizer->setCircularReferenceHandler(function ($object) {
-			return $object->getTitle();
-		});
+        $normalizer->setCircularReferenceHandler(function ($object) {
+            return $object->getTitle();
+        });
 
-		$serializer = new Serializer(array($normalizer), array($encoder));
+        $serializer = new Serializer(array($normalizer), array($encoder));
 
-		$data = $serializer->normalize($artists, null, 
-			[
-				'attributes' => [
-					'name','token', 'albums' => [
-						'token', 'title', 'cover'
-					]
-				]
-			]
-		);
+        $data = $serializer->normalize($artists, null, 
+            [
+                'attributes' => [
+                    'name','token', 'albums' => [
+                        'token', 'title', 'cover'
+                    ]
+                ]
+            ]
+        );
 
-		return $this->sendJsonResponse($serializer->serialize($data, 'json'), 200);
+        return $this->sendJsonResponse($serializer->serialize($data, 'json'), 200);
     }
 
     /**
@@ -54,36 +54,36 @@ class ArtistController extends AbstractController
      */
     public function getArtist($token)
     {
-    	$artist = $this->artistRepository->findOneByToken($token);
+        $artist = $this->artistRepository->findOneByToken($token);
 
-    	$encoder = new JsonEncoder();
-		$normalizer = new ObjectNormalizer();
+        $encoder = new JsonEncoder();
+        $normalizer = new ObjectNormalizer();
 
-		$normalizer->setCircularReferenceHandler(function ($object) {
-			return $object->getTitle();
-		});
+        $normalizer->setCircularReferenceHandler(function ($object) {
+            return $object->getTitle();
+        });
 
-		$serializer = new Serializer(array($normalizer), array($encoder));
+        $serializer = new Serializer(array($normalizer), array($encoder));
 
-    	if (!$artist instanceof \App\Entity\Artist) {
-    		return $this->sendJsonResponse($serializer->serialize(
-    			[
-    				'message' => 'Artist does not exist'
-    			], 
-    			'json'), 404);
-    	}
+        if (!$artist instanceof \App\Entity\Artist) {
+            return $this->sendJsonResponse($serializer->serialize(
+                [
+                    'message' => 'Artist does not exist'
+                ], 
+                'json'), 404);
+        }
 
-		$data = $serializer->normalize($artist, null, 
-			[
-				'attributes' => [
-					'name','token', 'albums' => [
-						'token', 'title', 'cover'
-					]
-				]
-			]
-		);
+        $data = $serializer->normalize($artist, null, 
+            [
+                'attributes' => [
+                    'name','token', 'albums' => [
+                        'token', 'title', 'cover'
+                    ]
+                ]
+            ]
+        );
 
-		return $this->sendJsonResponse($serializer->serialize($data, 'json'), 200);
+        return $this->sendJsonResponse($serializer->serialize($data, 'json'), 200);
     }
 
     
