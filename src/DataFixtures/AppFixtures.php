@@ -16,33 +16,19 @@ class AppFixtures extends Fixture
     	$artists = $this->readFile();
 
         foreach ($artists as $artistField) {
-        	$artist = new Artist();
-        	$artist->setName($artistField['name']);
-        	$artist->setToken($artist->getToken());
+        	$artist = $this-addArtist($artistField);
         	// Persist artist
         	$manager->persist($artist);
-
         	// Set Artist albums
         	$albums = $artistField['albums'];
         	foreach ($albums as $albumField) {
-        		$album = new Album();
-        		$album->setTitle($albumField['title']);
-        		$album->setCover($albumField['cover']);
-        		$album->setDescription($albumField['description']);
-        		$album->setToken($album->getToken());
-        		// Set artists
-        		$album->setArtist($artist);
+        		$album = $this->addAlbum($artist, $albumField);
         		// Persist album
         		$manager->persist($album);
-
         		// Set Songs per album
         		$songs = $albumField['songs'];
         		foreach ($songs as $songField) {
-        			$song = new Song();
-        			$song->setTitle($songField['title']);
-        			$song->setLength($songField['length']);
-        			// Set Album on songs
-        			$song->setAlbum($album);
+        			$song = $this->addSong($album, $songField);
         			// Persist song
         			$manager->persist($song);
         		}
@@ -57,5 +43,38 @@ class AppFixtures extends Fixture
     	$jsonString = file_get_contents(__DIR__.'/data/artist-albums.json');
 
     	return json_decode($jsonString, true);
+    }
+
+    public function addArtist($artistField): ?Artist
+    {
+        $artist = new Artist();
+        $artist->setName($artistField['name']);
+        $artist->setToken($artist->getToken());
+
+        return $artist;
+    }
+
+    public function addSong($album, $songField): ?Song
+    {
+        $song = new Song();
+        $song->setTitle($songField['title']);
+        $song->setLength($songField['length']);
+        // Set Album on songs
+        $song->setAlbum($album);
+
+        return $song;
+    }
+
+    public function addAlbum($artist, $albumField): ?Album
+    {
+        $album = new Album();
+        $album->setTitle($albumField['title']);
+        $album->setCover($albumField['cover']);
+        $album->setDescription($albumField['description']);
+        $album->setToken($album->getToken());
+        // Set artists
+        $album->setArtist($artist);
+
+        return $album;
     }
 }
