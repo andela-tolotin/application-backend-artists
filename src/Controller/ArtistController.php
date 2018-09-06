@@ -35,11 +35,8 @@ class ArtistController extends AbstractController
 		});
 
 		$serializer = new Serializer(array($normalizer), array($encoder));
-		$artist = null;
-		if (count($artists) > 0) {
-			$artist = $artists[0];
-		}
-		$data = $serializer->normalize($artist, null, 
+
+		$data = $serializer->normalize($artists, null, 
 			[
 				'attributes' => [
 					'name','token', 'albums' => [
