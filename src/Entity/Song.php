@@ -22,7 +22,7 @@ class Song
     private $title;
 
     /**
-     * @ORM\Column(type="int", length=10)
+     * @ORM\Column(type="float", length=10)
      */
     private $length;
 
@@ -50,13 +50,13 @@ class Song
 
     public function getLength(): ?int
     {
-        // Transform the length to seconds
-        return ((int) str_replace(':', '.', $this->length)) * 60;
+        return $this->length;
     }
 
     public function setLength(string $length): self
     {
-        $this->length = $length;
+        // Transform the length to seconds
+        $this->length = ((int) str_replace(':', '.', $length)) * 60;
 
         return $this;
     }
