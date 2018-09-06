@@ -16,7 +16,7 @@ class AppFixtures extends Fixture
     	$artists = $this->readFile();
 
         foreach ($artists as $artistField) {
-        	$artist = $this-addArtist($artistField);
+        	$artist = $this->addArtist($artistField);
         	// Persist artist
         	$manager->persist($artist);
         	// Set Artist albums
