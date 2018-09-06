@@ -50,7 +50,8 @@ class Song
 
     public function getLength(): ?int
     {
-        return $this->length;
+        // Convert length to minutes
+        return (int) ($this->length / 60);
     }
 
     public function setLength(string $length): self
