@@ -25,19 +25,19 @@ class Artist
     private $name;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Album", mappedBy="artist", orphanRemoval=true)
-     */
-    private $Album;
-
-    /**
      * @ORM\Column(type="string", length=6)
      */
     private $token;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Album", mappedBy="artist", orphanRemoval=true)
+     */
+    private $albums;
+
     public function __construct()
     {
         $this->token = TokenGenerator::generate(6);
-        $this->Album = new ArrayCollection();
+        $this->albums = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -60,15 +60,15 @@ class Artist
     /**
      * @return Collection|Album[]
      */
-    public function getAlbum(): Collection
+    public function getAlbums(): Collection
     {
-        return $this->Album;
+        return $this->albums;
     }
 
     public function addAlbum(Album $album): self
     {
         if (!$this->Album->contains($album)) {
-            $this->Album[] = $album;
+            $this->albums[] = $album;
             $album->setArtist($this);
         }
 
