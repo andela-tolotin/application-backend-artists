@@ -57,7 +57,9 @@ class Song
     public function setLength(string $length): self
     {
         // Transform the length to seconds
-        $this->length = ((int) str_replace(':', '.', $length)) * 60;
+        list($min, $sec) = explode(':', $length);
+
+        $this->length = (int) (($min * 60) + $sec);
 
         return $this;
     }
